@@ -9,6 +9,7 @@ import CreateCashVoucher from "./components/voucher/CreateCashVoucher";
 import Inventory from "./components/inventory/Inventory";
 import BuyVouchers from "./components/buyVouchers/BuyCashVouchers";
 import MyProfile from "./components/user/MyProfile";
+import GiftVouchers from "./components/gift/GiftVouchers";
 
 Vue.use(VueRouter);
 
@@ -58,7 +59,12 @@ export default new VueRouter({
             name: 'MyProfile',
             path:'/my-profile' ,
             component : MyProfile,
-        }
+        },
+        {
+            name: 'GiftVouchers',
+            path:'/gift-vouchers' ,
+            component : GiftVouchers,
+        },
     ],
 
     mode:'history'

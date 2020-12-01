@@ -14,7 +14,7 @@
 <!--                        <li class="nav-item"><a href="#" class="nav-link">Service</a></li>-->
 <!--                        <li class="nav-item"><a href="#" class="nav-link">More</a></li>-->
 <!--                    </ul>-->
-                    <ul class="nav navbar-nav flex-row text-right">
+                    <ul v-if="isLog===0" class="nav navbar-nav flex-row text-right">
                         <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
                         <li class="dropdown order-1">
                             <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">Login <span class="caret"></span></button>
@@ -28,7 +28,7 @@
                                             <input v-model="login.password" id="passwordInput" placeholder="Password" class="form-control form-control-sm" type="password" required="">
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary btn-block" @click="log()">Login</button>
+                                            <button type="button" id="loginBtn" class="btn btn-primary btn-block" @click="log()" data-toggle="dropdown">Login</button>
                                         </div>
                                         <div class="form-group text-center">
                                             <small><a href="#" data-toggle="modal" data-target="#modalPassword">Forgot password?</a></small>
@@ -60,7 +60,7 @@
                                             <input v-model="registration.password_confirmation" id="RegiConfirmPasswordInput" placeholder="Confirm Password" class="form-control form-control-sm" type="password" required="">
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary btn-block" @click="register()">Register</button>
+                                            <button type="button" class="btn btn-primary btn-block" @click="register()" data-toggle="dropdown">Register</button>
                                         </div>
                                     </form>
                                 </li>
@@ -89,10 +89,18 @@
                     </div>
                     <div class="modal-body">
                         <p>Reset your password..</p>
+                        <form class="form" role="form">
+                            <div class="form-group">
+                                <input v-model="reset.email" id="resetEmailInput" placeholder="Email" class="form-control form-control-sm" type="email" required="">
+                            </div>
+                            <div class="form-group">
+                                <input v-model="reset.password" id="resetPasswordInput" placeholder="Password" class="form-control form-control-sm" type="password" required="">
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button class="btn btn-primary">Save changes</button>
+                        <button class="btn btn-primary" @click="resetPassword()">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -119,11 +127,26 @@ export default {
                 password_confirmation:''
             },
             currentRoute:'',
+            user:'',
+            isLog:0,
+            reset:{
+                email:'',
+                password:'',
+            },
 
 
         }
     },
-    mounted() {
+    created() {
+        // if(JSON.parse(localStorage.getItem("user"))){
+        //     this.user = JSON.parse(localStorage.getItem("user"));
+        //     console.log('user = ',this.user);
+        //     this.isLog = 1;
+        //     console.log("Is Log : ",this.isLog)
+        // }
+        // else{
+        //     //alert('Please Log');
+        // }
 
     },
     methods:{
@@ -140,6 +163,8 @@ export default {
                     console.log('***++',this.$router.currentRoute.name)
                     this.currentRoute = this.$router.currentRoute.name;
                 }
+                this.login.email = '';
+                this.login.password = '';
 
             });
 
@@ -147,18 +172,27 @@ export default {
         register(){
             axios.post('/api/register',
                 this.registration
-            )
-                .then(function (response) {
-
-                    console.log(response.data);
-                })
+            ).then(response => {
+                console.log(response.data);
+            });
+            location.reload();
             this.$router.push({path: "/"});
+
         },
         logout(){
             localStorage.removeItem("user");
             localStorage.removeItem("token");
             this.$router.push({path: "/"});
             location.reload();
+        },
+        resetPassword(){
+            axios.post('/api/reset-password',
+                this.reset
+            ).then(response => {
+                console.log(response.data);
+            });
+            location.reload();
+            //this.$router.push({path: "/"});
         }
 
     }

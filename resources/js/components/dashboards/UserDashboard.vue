@@ -56,17 +56,19 @@
             </div>
 
             <div v-if="user[0].role_id == 3">
-                <button type="button" class="btn btn-light">
-                    <div class="tile wide invoice">
-                        <div class="header">
-                            <div class="count"><i class="fa fa-group" style="font-size:336px"></i></div>
-                            <div class="title"></div>
+                <router-link to="/gift-vouchers" class="nav-link">
+                    <button type="button" class="btn btn-light">
+                        <div class="tile wide invoice">
+                            <div class="header">
+                                <div class="count"><i class="fa fa-group" style="font-size:336px"></i></div>
+                                <div class="title"></div>
+                            </div>
+                            <div class="body">
+                                <div class="title">Gift Vouchers</div>
+                            </div>
                         </div>
-                        <div class="body">
-                            <div class="title">Gift Vouchers</div>
-                        </div>
-                    </div>
-                </button>
+                    </button>
+                </router-link>
             </div>
 
             <div>

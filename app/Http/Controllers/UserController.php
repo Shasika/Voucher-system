@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -89,5 +90,20 @@ class UserController extends Controller
         auth('api')->logout();
         echo '<script>localStorage.removeItem("user");</script>';
         exit;
+    }
+    public function resetPassword(Request $request)
+    {//dd($request->all());
+        $newPassword = $request->get('password');
+        $newPassword = Hash::make($newPassword);
+
+        $reset=DB::table('users')
+            ->where("email",$request->get('email'))
+            ->update(array(
+                'password' => $newPassword
+            ));
+
+        return response()->json($reset, 200);
+
+        //$purchased = Voucher::where('id', '=', $request->get('id'))->update(array('is_purchased' => 1));
     }
 }

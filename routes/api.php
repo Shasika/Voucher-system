@@ -22,6 +22,7 @@ Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@authenticate');
 Route::get('refresh', 'UserController@refresh');
 Route::post('logout', 'UserController@logout');
+Route::post('reset-password', 'UserController@resetPassword');
 Route::get('open', 'DataController@open');
 
 Route::post('create-voucher', 'VoucherController@store');
@@ -39,6 +40,8 @@ Route::post('buy-regular-voucher/{id}', 'BuyVoucherController@buyVoucher');
 
 Route::get('get-purchased-cash-vouchers/{id}', 'BuyCashVoucherController@getCashVouchersById');
 Route::get('get-purchased-regular-vouchers/{id}', 'BuyVoucherController@getRegularVouchersById');
+
+Route::post('send-mail','MailSend@mailtoSendGift');
 
 
 
