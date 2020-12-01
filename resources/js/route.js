@@ -10,6 +10,7 @@ import Inventory from "./components/inventory/Inventory";
 import BuyVouchers from "./components/buyVouchers/BuyCashVouchers";
 import MyProfile from "./components/user/MyProfile";
 import GiftVouchers from "./components/gift/GiftVouchers";
+import Welcome from "./components/Welcome";
 
 Vue.use(VueRouter);
 
@@ -64,6 +65,10 @@ export default new VueRouter({
             name: 'GiftVouchers',
             path:'/gift-vouchers' ,
             component : GiftVouchers,
+        },{
+            name: 'Welcome',
+            path:'/' ,
+            component : Welcome,
         },
     ],
 

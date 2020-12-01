@@ -8,12 +8,6 @@
                     &#9776;
                 </button>
                 <div class="collapse navbar-collapse" id="exCollapsingNavbar">
-<!--                    <ul class="nav navbar-nav">-->
-<!--                        <li class="nav-item"><a href="#" class="nav-link">About</a></li>-->
-<!--                        <li class="nav-item"><a href="#" class="nav-link">Link</a></li>-->
-<!--                        <li class="nav-item"><a href="#" class="nav-link">Service</a></li>-->
-<!--                        <li class="nav-item"><a href="#" class="nav-link">More</a></li>-->
-<!--                    </ul>-->
                     <ul v-if="isLog===0" class="nav navbar-nav flex-row text-right">
                         <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
                         <li class="dropdown order-1">
@@ -26,6 +20,9 @@
                                         </div>
                                         <div class="form-group">
                                             <input v-model="login.password" id="passwordInput" placeholder="Password" class="form-control form-control-sm" type="password" required="">
+                                        </div>
+                                        <div class="form-group" v-if="loginError">
+                                            <p style="color: red">{{loginError}}</p>
                                         </div>
                                         <div class="form-group">
                                             <button type="button" id="loginBtn" class="btn btn-primary btn-block" @click="log()" data-toggle="dropdown">Login</button>
@@ -58,6 +55,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input v-model="registration.password_confirmation" id="RegiConfirmPasswordInput" placeholder="Confirm Password" class="form-control form-control-sm" type="password" required="">
+                                            <p class="text-warning small">* Must similar with above password</p>
                                         </div>
                                         <div class="form-group">
                                             <button type="button" class="btn btn-primary btn-block" @click="register()" data-toggle="dropdown">Register</button>
@@ -92,9 +90,10 @@
                         <form class="form" role="form">
                             <div class="form-group">
                                 <input v-model="reset.email" id="resetEmailInput" placeholder="Email" class="form-control form-control-sm" type="email" required="">
+                                <p class="text-warning small">* Previously used email address</p>
                             </div>
                             <div class="form-group">
-                                <input v-model="reset.password" id="resetPasswordInput" placeholder="Password" class="form-control form-control-sm" type="password" required="">
+                                <input v-model="reset.password" id="resetPasswordInput" placeholder="New Password" class="form-control form-control-sm" type="password" required="">
                             </div>
                         </form>
                     </div>
@@ -133,29 +132,21 @@ export default {
                 email:'',
                 password:'',
             },
+            loginError:'',
 
 
         }
     },
     created() {
-        // if(JSON.parse(localStorage.getItem("user"))){
-        //     this.user = JSON.parse(localStorage.getItem("user"));
-        //     console.log('user = ',this.user);
-        //     this.isLog = 1;
-        //     console.log("Is Log : ",this.isLog)
-        // }
-        // else{
-        //     //alert('Please Log');
-        // }
 
     },
     methods:{
         log() {
             axios.post('/api/login', this.login
             ).then(response => {
-                console.log("********", response.data[0].token);
+                console.log("********", response.data.error);
                 if (response.data.error) {
-                    alert('Invalid Credentials');
+                    this.loginError =response.data.error;
                 } else {
                     localStorage.setItem("user", JSON.stringify(response.data.user, response.data.token));
                     localStorage.setItem("token", JSON.stringify(response.data[0].token));
@@ -192,7 +183,6 @@ export default {
                 console.log(response.data);
             });
             location.reload();
-            //this.$router.push({path: "/"});
         }
 
     }

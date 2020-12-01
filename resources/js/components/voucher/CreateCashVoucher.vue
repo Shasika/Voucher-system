@@ -10,6 +10,7 @@
                 <div class="form-group">
                     <label for="price">Price(Rs.)</label>
                     <input v-model="voucher.price" type="number" value="0" min="0" step="500" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="price" />
+                    <p class="text-warning small">* Price which is a multiplication of 500</p>
                 </div>
                 <div class="form-group">
                     <label>Validity Period</label>

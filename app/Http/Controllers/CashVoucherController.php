@@ -37,7 +37,7 @@ class CashVoucherController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
-    {//dd($request->all());
+    {
         $validTill = Carbon::now();
         $isApproved = null;
 
@@ -51,7 +51,6 @@ class CashVoucherController extends Controller
             $validTill->addYears(2);
         }
 
-        //dd($isApproved);
         $voucher = CashVoucher::create([
             'price' => $request->get('price'),
             'validity_period' => $request->get('validityPeriod'),
@@ -60,10 +59,7 @@ class CashVoucherController extends Controller
             'created_by'=> $request->get('createdBy'),
         ]);
 
-
         return response()->json($voucher,200);
-
-        //dd($current->all());
     }
 
     /**
@@ -113,28 +109,21 @@ class CashVoucherController extends Controller
     }
 
     public function getVouchersById($id)
-    {//dd($id);
+    {
         $vouchers = CashVoucher::where(['created_by'=>$id])->get();
-        //dd($vouchers);
         return response()->json($vouchers,200);
     }
 
     public function getCount()
-    {//dd(1);
-
+    {
         $counts = [
-                'remainingVouchers' => [Voucher::where('is_purchased', '=', 0)->count()],
-                'remainingCashVouchers' => [CashVoucher::where('is_purchased' , '=',0)->count()],
-                'purchasedCashVouchers' => [CashVoucher::where('is_purchased' , '=',1)->count()],
-                'purchasedVouchers' => [Voucher::where('is_purchased' , '=',1)->count()],
+            'remainingVouchers' => [Voucher::where('is_purchased', '=', 0)->count()],
+            'remainingCashVouchers' => [CashVoucher::where('is_purchased', '=', 0)->count()],
+            'purchasedCashVouchers' => [CashVoucher::where('is_purchased', '=', 1)->count()],
+            'purchasedVouchers' => [Voucher::where('is_purchased', '=', 1)->count()],
 
         ];
-
-        return response()->json($counts,200);
-
-    }
-    public function buyVoucher(Request $request,$id){
-        dd($request);
+        return response()->json($counts, 200);
     }
 }
 

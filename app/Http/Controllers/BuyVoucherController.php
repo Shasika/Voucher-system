@@ -84,26 +84,23 @@ class BuyVoucherController extends Controller
         //
     }
 
-
-    public function buyVoucher(Request $request,$id)
+    public function buyVoucher(Request $request, $id)
     {
-        //dd($request);
         $voucher = BuyVoucher::create([
             'price' => $request->get('price'),
             'terms_conditions' => $request->get('terms_conditions'),
             'validity_period' => $request->get('validity_period'),
             'valid_till' => $request->get('valid_till'),
-            'buyer_id'=> $id
+            'buyer_id' => $id
         ]);
         $purchased = Voucher::where('id', '=', $request->get('id'))->update(array('is_purchased' => 1));
-
-        return response()->json(array($voucher,$purchased),200);
+        return response()->json(array($voucher, $purchased), 200);
     }
+
     public function getRegularVouchersById($id)
-    {//dd($id);
+    {
         $vouchers = BuyVoucher::where(array('buyer_id' => $id))->get();
-        //dd($vouchers);
-        return response()->json($vouchers,200);
+        return response()->json($vouchers, 200);
     }
 
 

@@ -13,30 +13,30 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class UserController extends Controller
 {
     public function authenticate(Request $request)
-    {//dd($request->all());
+    {
         $credentials = $request->only('email', 'password');
 
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if(!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 200);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 200);
         }
 
-        $user = User::where(['email'=>$request->only('email')])->get();
-        return response()->json([compact('token'),'user'=>$user]);
+        $user = User::where(['email' => $request->only('email')])->get();
+        return response()->json([compact('token'), 'user' => $user]);
     }
 
     public function register(Request $request)
-    {//dd($request->get('role_id') === 2 ? 2 : 3);
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if($validator->fails()){
+        if($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
 
@@ -49,14 +49,14 @@ class UserController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return response()->json(compact('user','token'),201);
+        return response()->json(compact('user', 'token'), 201);
     }
 
     public function getAuthenticatedUser()
     {
         try {
 
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
 
@@ -76,6 +76,7 @@ class UserController extends Controller
 
         return response()->json(compact('user'));
     }
+
     public function refresh()
     {
         if ($token = auth('api')->refresh()) {
@@ -83,16 +84,12 @@ class UserController extends Controller
                 ->json(['status' => 'successs'], 200)
                 ->header('Authorization', $token);
         }
+
         return response()->json(['error' => 'refresh_token_error'], 401);
     }
-    public function logout(){
-        dd(auth('api')->get());
-        auth('api')->logout();
-        echo '<script>localStorage.removeItem("user");</script>';
-        exit;
-    }
+
     public function resetPassword(Request $request)
-    {//dd($request->all());
+    {
         $newPassword = $request->get('password');
         $newPassword = Hash::make($newPassword);
 
@@ -104,6 +101,5 @@ class UserController extends Controller
 
         return response()->json($reset, 200);
 
-        //$purchased = Voucher::where('id', '=', $request->get('id'))->update(array('is_purchased' => 1));
     }
 }

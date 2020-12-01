@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\BuyCashVoucher;
 use App\CashVoucher;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BuyCashVoucherController extends Controller
@@ -85,7 +84,6 @@ class BuyCashVoucherController extends Controller
         //
     }
 
-
     public function buyVoucher(Request $request,$id)
     {
         $voucher = BuyCashVoucher::create([
@@ -95,14 +93,13 @@ class BuyCashVoucherController extends Controller
             'buyer_id'=> $id
         ]);
         $purchased = CashVoucher::where('id', '=', $request->get('id'))->update(array('is_purchased' => 1));
-
         return response()->json(array($voucher,$purchased),200);
     }
+
     public function getCashVouchersById($id)
-    {//dd($id);
+    {
         $vouchers = BuyCashVoucher::where(array('buyer_id' => $id))->get();
-        //dd($vouchers);
-        return response()->json($vouchers,200);
+        return response()->json($vouchers, 200);
     }
 
 

@@ -35,45 +35,37 @@ class VoucherController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
-    {//dd($request->all());
+    {
         $validTill = Carbon::now();
         $isApproved = null;
 
-        if($request->validityPeriod === '6 months'){
+        if ($request->validityPeriod === '6 months') {
             $validTill->addMonths(6);
-        }
-        elseif ($request->validityPeriod === '1 year'){
+        } elseif ($request->validityPeriod === '1 year') {
             $validTill->addYears(1);
-        }
-        elseif ($request->validityPeriod === '2 years'){
+        } elseif ($request->validityPeriod === '2 years') {
             $validTill->addYears(2);
         }
 
-        //dd($request->get('createdRole'));
-        if($request->get('createdRole')===2){
+        if ($request->get('createdRole') === 2) {
             $isApproved = 0;
 
-        }
-        elseif ($request->get('createdRole')===1){
+        } elseif ($request->get('createdRole') === 1) {
 
             $isApproved = 1;
 
         }
-        //$isPurchased = 1;
-        //dd($isApproved);
         $voucher = Voucher::create([
             'price' => $request->get('price'),
             'terms_conditions' => $request->get('termsConditions'),
             'validity_period' => $request->get('validityPeriod'),
             'valid_till' => $validTill,
-            'created_role'=> $request->get('createdRole'),
-            'is_approved'=> $isApproved,
+            'created_role' => $request->get('createdRole'),
+            'is_approved' => $isApproved,
         ]);
 
+        return response()->json($voucher, 200);
 
-        return response()->json($voucher,200);
-
-        //dd($current->all());
     }
 
     /**
@@ -121,9 +113,10 @@ class VoucherController extends Controller
     {
         //
     }
+
     public function approve($id)
-    {//dd($id);
+    {
         $voucher = Voucher::where('id', '=', $id)->update(array('is_approved' => 1));
-        return response()->json($voucher,200);
+        return response()->json($voucher, 200);
     }
 }
